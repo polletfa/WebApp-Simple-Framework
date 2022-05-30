@@ -2,9 +2,9 @@
 
 ## Usage
 
-- Create a copy of [WebApp-Simple-Framework-Example](https://github.com/polletfa/WebApp-Simple-Framework).
+- Create a copy of [WebApp-Simple-Framework-Example](https://github.com/polletfa/WebApp-Simple-Framework-Example).
 - Add WebApp-Simple-Framework as submodule under framework/.
-- Adapt [WebApp-Simple-Framework-Example](https://github.com/polletfa/WebApp-Simple-Framework) to your needs.
+- Adapt [WebApp-Simple-Framework-Example](https://github.com/polletfa/WebApp-Simple-Framework-Example) to your needs.
 
 ## License
 
