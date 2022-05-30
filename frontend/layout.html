@@ -1,0 +1,89 @@
+<!DOCTYPE html><!--!
+----------------------------------------------------
+
+  WebApp-Simple-Framework
+
+  (c) 2022 Fabien Pollet <polletfa@posteo.de>
+  MIT License (see LICENSE.md file)
+  
+------------------------------------------------- -->
+<!--                                    -->
+<!-- Import external files              -->
+<!--                                    -->
+<!import bootstrap/dist/css/bootstrap.min.css>
+<!import bootstrap-icons/bootstrap-icons.svg>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" style="position: relative; min-height:100%;">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link id="favicon" rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title><!name> <!version></title>
+    <script id="FrontendConfig" type="application/json"><!FrontendConfig></script>
+    <!include layout/metadata.html>
+  </head>
+  <body onresize="window.application.layout.resizeHeader();">
+    
+    <!-- Header: title bar & error banner   -->
+
+    <header class="header fixed-top bg-white text-black" id="header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col h1"><span id="title-text"><!name>&nbsp;<!version></span></div>
+          <div class="col col-sm-1 d-flex align-items-center justify-content-end">
+            <span id="loading-spinner" class="spinner-border d-none" style="width: 24px; height: 24px;" role="status"></span>
+            <a id="refresh-button" class="d-none" href="#" onclick="window.application.refresh();"><svg class="bi" fill="black" width="24" height="24">
+                <use xlink:href="#arrow-repeat" />
+            </svg></a>
+          </div>
+        </div>
+
+        <div id="error-banner" class="alert alert-dark d-none" role="alert">
+          <span id="error-text"></span>&nbsp;<a class="alert-link" href="#" data-bs-toggle="collapse" data-bs-target="#extended-error">(Details)</a>
+          <div class="collapse" id="extended-error"><br/><span id="extended-error-text"></span></div>
+        </div>
+      </div>
+
+      <!include layout/header.html>
+    </header>
+
+    <!-- Main: content                      -->
+
+    <main>
+      <div class="container-fluid">
+        <div id="content">
+          <!include layout/pages.html>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer                             -->
+
+    <footer class="footer mt-auto bg-dark text-white" style="position: absolute; bottom: 0; width:100%">
+      <div class="container">
+        <!include layout/footer.html>
+        <div class="row bg-dark text-white" role="alert"><div class="col text-center">
+            <!name>&nbsp;<!version></div></div>
+      </div>
+    </footer>
+
+    <!-- Modals                             -->
+    <div class="modal modal" id="insecure-dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body bg-danger text-white">
+            <h1>Insecure configuration!</h1>
+            <hr />
+            <p>The current configuration allows remote requests over HTTP.
+
+            <p>To disable this warning, you can:</p>
+            <ul>
+              <li>Configure the server to use HTTPS, or</li>
+              <li>Disable allowInsecure to allow access from localhost only.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!include layout/modals.html>
+  </body>
+</html>

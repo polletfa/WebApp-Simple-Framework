@@ -1,0 +1,112 @@
+### 
+###  WebApp-Simple-Framework
+### 
+###  (c) 2022 Fabien Pollet <polletfa@posteo.de>
+###  MIT License (see LICENSE.md file)
+### 
+
+#
+# The configuration file has two sections:
+# - main section: for options that will apply to all servers
+# - server sections: list of server-specific configurations.
+# All options can be used in both sections.
+# All options have default values (an empty file is a valid configuration file).
+#
+# Single server
+#   If you want to run only one server, you can omit the server section. The single server will use the options
+#   specified in the main section.
+#
+# Multiple servers
+#   If you use multiple servers, each server will use the main section only for parameters that
+#   have not been specified as part of the server-specific configuration.
+#
+# HTTP or HTTPS
+#   The servers can use HTTP or the more secure HTTPS.
+#   To enable HTTPS, you must specify a certificate and the corresponding private key.
+#
+#   When running HTTP, only localhost requests will be accepted. Request from a remote address will be rejected.
+#   You can disable this behaviour by using the allowInsecure option.
+#
+#
+# GENERIC OPTIONS
+#
+# name - string (default: default)
+#     Name of the server. For logging only.
+#
+# port - TCP port number (default: 8080)
+#     You will need elevated permissions to use a low numbered port (lower than 1024).
+#     Each server must use a different port.
+#
+# sessionMaxIdle - duration with unit s, m, h or d (default: 1d)
+#     Session are deleted if they are not used for longer than the specified time.
+#
+# logHeaders - true/false (default_ false)
+#     If true, the HTTP headers of requests will be logged.
+#
+# data - Path to directory (default: data)
+#     Directory used to store user data.
+#     The application requires read/write permissions for this directory.
+#
+# SECURITY OPTIONS
+#
+# requireHostname - string (default: empty)
+#     Accept only requests to the specified hostname (or localhost).
+#
+# allowInsecure - true/false (default: false)
+#     When using the unsecure HTTP protocol, only requests from localhost will be accepted.
+#     You can disable this behaviour by setting this option to true.
+#
+# ssl:
+#   cert - Path to PEM certificate file, (default: empty)
+#     Certificate required to use HTTPS. For a localhost server, this is not required.
+#
+#     Ideally you need a certificate signed by a Certificate Authority. Some server hosting services
+#     include such a certificate.
+#
+#     You can also use a self-signed certificate, but you will get a security warning from the browser
+#     when accessing the site.
+#
+#     You also need to set ssl.key.
+#
+# ssl:
+#   key - Path to PEM private key file (default: empty)
+#     Private key associated with the certificate and required to use HTTPS.
+#     See ssl:cert
+#
+# EXAMPLES
+#
+# Example 1 - Single server
+#
+#     port: 8001
+#     data: /srv/data
+#
+# Example 2 - Multiple servers
+# 
+#     servers:
+#     - name: httpServer
+#       port: 8001
+#       allowInsecure: true
+#       data: /srv/data1
+#
+#     - name: httpsServer
+#       port: 8002
+#       ssl:
+#         cert: /srv/ssl/certificate.pem
+#         key: /srv/ssl/private-key.pem
+#       data: /srv/data2
+#
+# Example 3 - Multiple servers: both over HTTPS
+#
+#     ssl:
+#       cert: /srv/ssl/certificate.pem
+#       key: /srv/ssl/private-key.pem
+#
+#     servers:
+#     - name: server1
+#       port: 8001
+#       data: /srv/data1
+#
+#     - name: server2
+#       port: 8002
+#       data: /srv/data2
+#
