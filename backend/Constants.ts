@@ -31,11 +31,6 @@ export class Constants {
     static readonly FRONTEND_MARKER = "<!FrontendConfig>";
 
     /**
-     * Database file
-     */
-    static readonly DATABASE_FILE = "data.db";
-
-    /**
      * Default configuration
      */
     static readonly DEFAULT_CONFIG: ServerConfig = {
