@@ -29,6 +29,9 @@ export abstract class APIBase extends ServerModule {
      * @return False
      */
     public handleError(_unused1: number, _unused2: string, _unused3: http.ServerResponse): boolean {
+        _unused1;
+        _unused2;
+        _unused3;
         return false;
     }
 

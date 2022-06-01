@@ -12,7 +12,6 @@ import { Modal } from "bootstrap";
 import { Layout } from '../../framework/frontend/Layout';
 
 import { FrontendConfig, isFrontendConfig } from '../../framework/backend/types/Config';
-import { APIResponse, isAPIResponse, APIResponseStatus } from '../../framework/backend/types/API';
 
 // extend Window to add a reference to the FrontendApplication instance
 export interface CustomWindow extends Window {

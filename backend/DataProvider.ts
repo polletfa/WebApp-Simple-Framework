@@ -9,12 +9,11 @@
 
 import * as fs from "fs";
 
-import { Constants } from "./Constants";
 import { Server } from "./Server";
 
-// eslint-disable-next-line
-type DB = {
+export type DB = {
     name: string;
+    // eslint-disable-next-line
     data: any;
 };
 

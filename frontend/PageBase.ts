@@ -7,8 +7,6 @@
  *
  *****************************************************/
 
-import { FrontendApplication } from "./FrontendApplication";
-
 /**
  * Base for all pages
  */
