@@ -39,13 +39,20 @@ export class DataProvider {
         return new Promise((resolve, reject) => {
             fs.readFile(this.server.config.data + "/" + name + ".json", (err: NodeJS.ErrnoException|null, data: Buffer|null) => {
                 if(err) {
-                    if(err.code == "ENOENT") { resolve({name: name, data: {}}); }
-                    else                     { reject(err); }
+                    if(err.code == "ENOENT") {
+                        this.server.log("Read database "+name+": empty");
+                        resolve({name: name, data: {}});
+                    } else {
+                        this.server.log("Read database "+name+": FAILURE! (file-error)");
+                        reject(err);
+                    }
                 } else {
                     try {
                         const json = data ? JSON.parse(data.toString()) : {};
+                        this.server.log("Read database "+name);
                         resolve({name: name, data: json});
                     } catch(e) {
+                        this.server.log("Read database "+name+": FAILURE! (parse-error)");
                         reject(e);
                     }
                 }
@@ -62,8 +69,13 @@ export class DataProvider {
     public async writeDB(db: DB): Promise<void> {
         return new Promise((resolve, reject) => {
             fs.writeFile(this.server.config.data + "/" + db.name + ".json", JSON.stringify(db.data), (err: Error|null) => {
-                if(err) { reject(err); }
-                else    { resolve();   }
+                if(err) {
+                    this.server.log("Write database " + db.name + ": FAILURE!");
+                    reject(err);
+                } else {
+                    this.server.log("Write database " + db.name);
+                    resolve();
+                }
             });
         });
     }
