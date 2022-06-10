@@ -25,8 +25,16 @@ export class APIRequest {
 
     protected resolve: (()=>void)|undefined = undefined;
     protected reject: (()=>void)|undefined = undefined;
-    
-    constructor(ui: FrontendApplication, request: string) {
+
+    /**
+     * Create and send an API request
+     *
+     * @param ui Layout object
+     * @param request Request URL
+     * @param parameters Parameters. Added to URL for GET or sent as data for POST request.
+     * @param requestType GET or POST. GET if omitted.
+     */
+    constructor(ui: FrontendApplication, request: string, parameters: string|undefined, requestType: "GET"|"POST") {
         this.ui = ui;
         
         new Promise<void>((resolve, reject) => {
@@ -35,9 +43,18 @@ export class APIRequest {
             
             const httpRequest = new XMLHttpRequest();
             APIRequest.nRequests ++;
-            httpRequest.open("GET", request, true);
+            let url = request;
+            let postParameters: string|undefined = undefined;
+            if(parameters != undefined) {
+                if(requestType == "GET") {
+                    url += "?" + parameters;
+                } else if(requestType == "POST") {
+                    postParameters = parameters;
+                }
+            }
+            httpRequest.open(requestType, url, true);
             httpRequest.responseType = "arraybuffer";
-            httpRequest.send();
+            httpRequest.send(postParameters);
             this.ui.layout.show('loading-spinner', true);
             this.ui.layout.show('refresh-button', false);
 

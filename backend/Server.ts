@@ -90,8 +90,6 @@ export class Server {
                 this.log("---");
                 this.securityWarning();
                 
-                const url = new URL(request.url, this.protocol+"://"+request.headers.host);
-
                 this.log(JSON.stringify({
                     protocol: this.protocol,
                     host: request.headers.host,
@@ -124,8 +122,22 @@ export class Server {
 
                 // handle request
                 const sessionId = this.sessionManager.getOrCreateSession(request, response);
-                if(!this.modules.some(mod => mod.handleRequest(url, sessionId, response))) {
-                    this.error(404, "Resource: "+url.pathname, response);
+                const urlbase = this.protocol+"://"+request.headers.host;
+                let urlpath = request.url;
+
+                this.log(JSON.stringify(request.method));
+                if (request.method === 'POST') {
+                    urlpath += urlpath.indexOf("?") < 0 ? "?" : "&";
+                        
+                    request.on('data', chunk => {
+                        urlpath += chunk.toString();
+                    });
+                    request.on('end', () => {
+                        this.log("end");
+                        this.handleRequest(new URL(urlpath, urlbase), sessionId, response);
+                    });
+                } else {
+                    this.handleRequest(new URL(urlpath, urlbase), sessionId, response);
                 }
             } else {
                 throw new Error("Invalid request - Empty URL");
@@ -135,6 +147,12 @@ export class Server {
         }
     }
 
+    public handleRequest(url: URL, sessionId: string, response: http.ServerResponse) {
+        if(!this.modules.some(mod => mod.handleRequest(url, sessionId, response))) {
+            this.error(404, "Resource: "+url.pathname, response);
+        }
+    }
+    
     public error(errorCode: number, error: string, response: http.ServerResponse) {
         this.log("ERROR: "+errorCode + " - " + error);
         try {
