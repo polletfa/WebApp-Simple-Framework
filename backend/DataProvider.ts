@@ -24,7 +24,6 @@ export class DataProvider {
         this.server = server;
     }
 
-
     /**
      * Read a data table
      *

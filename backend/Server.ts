@@ -43,7 +43,7 @@ export class Server {
         this.data = new DataProvider(this);
         this.sessionManager = new SessionManager(this);
         this.modules = moduleFactories.map(i => i(this)).concat(new FrontendProvider(this));
-        
+
         this.log(this.config.name + " = " + ConfigHelper.serverConfigToString(config, true));
         this.name = this.config.name;
         

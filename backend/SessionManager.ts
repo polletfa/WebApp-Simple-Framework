@@ -59,6 +59,7 @@ export class SessionManager {
         };
         this.sessions.push(session);
         this.server.log("Created new session: "+session.id);
+        this.server.modules.forEach(mod => mod.onInitSession(session.id));
         return session.id;
     }
 
