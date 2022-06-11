@@ -14,6 +14,8 @@ import { FrontendProvider } from "./FrontendProvider";
 import { Server } from "./Server";
 import { ServerModuleFactoryFunction } from "./ServerModule";
 
+import { SingleUserAuthenticationAPI } from "./apis/SingleUserAuthenticationAPI";
+
 import { ServerConfig } from "./types/Config";
 
 /**
@@ -33,7 +35,7 @@ export class BackendApplication {
     /**
      * Start backend application
      */
-    constructor(apis: ServerModuleFactoryFunction[]) {
+    constructor(apis: (ServerModuleFactoryFunction|string)[]) {
         try {
             // switch to the package root directory
             process.chdir(__dirname + "/..");
@@ -50,11 +52,27 @@ export class BackendApplication {
             // Read configuration
             const config = ConfigHelper.load(this);
             const plural = config.length > 1 ? "s" : "";
-            this.log("Starting server"+plural+" on port"+plural+": "+config.map(server => server.port).join(", "));
-            this.log("---");
+
+            // Prepare APIs
+            const preparedAPIs = [];
+            for(const api of apis) {
+                if(api === "SingleUserAuthenticationAPI") {
+                    // Built-in API
+                    this.log("Using built-in API: SingleUserAuthenticationAPI");
+                    preparedAPIs.push((server:Server) => new SingleUserAuthenticationAPI(server));
+                } else if(typeof api === "string") {
+                    // Unknown API
+                    this.log("Unknown built-in API: " + api);
+                } else {
+                    // User-defined APIs
+                    preparedAPIs.push(api);
+                }
+            }
 
             // Start servers
-            this.startServers(config, apis);
+            this.log("Starting server"+plural+" on port"+plural+": "+config.map(server => server.port).join(", "));
+            this.log("---");
+            this.startServers(config, preparedAPIs);
         } catch(e) {
             this.die(e instanceof Error ? e : new Error(String(e)));
         }

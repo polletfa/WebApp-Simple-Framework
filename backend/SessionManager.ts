@@ -13,12 +13,11 @@ import * as http from "http";
 import { Server } from "./Server";
 
 type Value = string|number|boolean;
-type KeyValue = {key: string, value: Value};
 
 interface Session {
     id: string,
     lastUsed: number;
-    data: KeyValue[];
+    data: {[key: string]: Value};
 }
 
 export class SessionManager {
@@ -56,7 +55,7 @@ export class SessionManager {
         const session = {
             id: uuid.v4(),
             lastUsed: Date.now(),
-            data: []
+            data: {}
         };
         this.sessions.push(session);
         this.server.log("Created new session: "+session.id);
@@ -76,9 +75,8 @@ export class SessionManager {
         const session = this.sessions.find((session:Session) => session.id == sessionId);
         if(session) {
             session.lastUsed = Date.now();
-            const keyValue = session.data.find((kv:KeyValue) => kv.key == key);
-            if(keyValue) {
-                return keyValue.value;
+            if(key in session.data) {
+                return session.data[key];
             } else {
                 this.server.log("Session "+sessionId+": key '"+key+"' not found.");
                 return undefined;
@@ -93,12 +91,7 @@ export class SessionManager {
         const session = this.sessions.find((session:Session) => session.id == sessionId);
         if(session) {
             session.lastUsed = Date.now();
-            const keyValue = session.data.find((kv:KeyValue) => kv.key == key);
-            if(keyValue) {
-                keyValue.value = value;
-            } else {
-                session.data.push({key: key, value: value});
-            }
+            session.data[key] = value;
             this.server.log("Session "+sessionId+": '"+key+"' => '"+value+"'");
             return true;
         } else {

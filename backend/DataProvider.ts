@@ -11,7 +11,8 @@ import * as fs from "fs";
 
 import { Server } from "./Server";
 
-export type DataTable = {[key: string]: string|number}[];
+type Value = string|number|boolean;
+export type DataTable = {[key: string]: Value}[];
 
 /**
  * Access to stored data

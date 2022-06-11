@@ -61,6 +61,13 @@ export class FrontendProvider extends ServerModule {
     }
 
     /**
+     * Called when a new session is initialized. Does nothing
+     */
+    public onSessionInit(): void {
+        return;
+    }
+
+    /**
      * Handle a HTTP request
      *
      * @param url Parsed URL

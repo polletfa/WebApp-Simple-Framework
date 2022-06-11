@@ -15,7 +15,14 @@ export abstract class ServerModule {
     readonly server: Server;
 
     constructor(server: Server) { this.server = server; }
-    
+
+    /**
+     * Called when a new session is initialized.
+     *
+     * @param sessionId Session ID
+     */
+    public abstract onSessionInit(sessionId: string): void;
+
     /**
      * Handle a HTTP request.
      * The method must either:
