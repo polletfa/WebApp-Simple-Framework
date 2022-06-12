@@ -101,6 +101,10 @@ export class SessionManager {
         }
     }
 
+    public setValueForAllSessions(key: string, value: Value): void {
+        this.sessions.forEach((session:Session) => this.setValue(session.id, key, value));
+    }
+
     public clearOldSessions() {
         const nSessions = this.sessions.length;
         this.sessions = this.sessions.filter((session: Session) => session.lastUsed - Date.now() < this.server.config.sessionMaxIdle);

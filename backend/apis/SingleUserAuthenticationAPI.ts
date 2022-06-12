@@ -14,15 +14,21 @@ import { APIBase } from "../APIBase";
 import { DataTable } from "../DataProvider";
 
 export class SingleUserAuthenticationAPI extends APIBase {
-    private data: DataTable|undefined = undefined;
-    
+    private initialized = false;
+    private password: string|undefined = undefined;
+
     constructor(server: Server) {
         super(server);
     }
 
     public async initModule(): Promise<void> {
         this.server.log("Create SingleUserAuthenticationAPI");
-        return this.server.data.readTable("SingleUserAuthenticationAPI").then(table => { this.data = table; });
+        return this.server.data.readTable("SingleUserAuthenticationAPI").then(data => {
+            this.initialized = true;
+            if(data[0] && "pw" in data[0] && typeof data[0].pw == "string") {
+                this.password = data[0].pw;
+            }
+        });
     }
     
     /**
@@ -30,9 +36,16 @@ export class SingleUserAuthenticationAPI extends APIBase {
      *
      * @param sessionId Session ID
      */
-    public onSessionInit(sessionId: string): void {           
-        sessionId;
-        // todo check if password is set and set flag in session
+    public onSessionInit(sessionId: string): void {
+        this.server.log("SingleUserAuthenticationAPI: onSessionInit");
+
+        if(!this.initialized) {
+            this.server.log("The SingleUserAuthenticationAPI is not initialized");
+            return;
+        }
+
+        this.server.sessionManager.setValue(sessionId, "SingleUserAuthenticationAPI:password_set", this.password !== undefined);
+        this.server.sessionManager.setValue(sessionId, "SingleUserAuthenticationAPI:logged_in", false);
     }
 
     /**
@@ -45,13 +58,15 @@ export class SingleUserAuthenticationAPI extends APIBase {
      */
     public handleRequest(url: URL, sessionId: string, response: http.ServerResponse): boolean {
         switch(url.pathname) {
-            // todo: setpw
+            case "/SingleUserAuthenticationAPI/setpw":
+                this.setPassword(url, sessionId, response);
+                return true;
                 
-            case "/sua/login":
+            case "/SingleUserAuthenticationAPI/login":
                 this.login(url, sessionId, response);
                 return true;
                 
-            case "/sua/logout":
+            case "/SingleUserAuthenticationAPI/logout":
                 this.logout(sessionId, response);
                 return true;
 
@@ -60,20 +75,56 @@ export class SingleUserAuthenticationAPI extends APIBase {
         }
     }
 
-    // todo
-    public login(url: URL, sessionId: string|null, response: http.ServerResponse): void {
-        const pw = url.searchParams.get("pw");
-        this.server.log("SingleUserAuthenticationAPI: login (pw = "+pw+")");
+    public setPassword(url: URL, sessionId: string, response: http.ServerResponse): void {
+        this.server.log("SingleUserAuthenticationAPI: setpw");
 
-        sessionId; //todo
-        this.sendAPIResponseSuccess(undefined, response);
+        if(!this.initialized) {
+            this.server.log("The SingleUserAuthenticationAPI is not initialized");
+            return;
+        }
+
+        const pw = url.searchParams.get("pw");
+        const logged_in = this.server.sessionManager.getValue(sessionId, "SingleUserAuthenticationAPI:logged_in") || false;
+
+        if(pw == null) {
+            this.sendAPIResponseError("SingleUserAuthenticationAPI", "Missing parameter", response);
+        } else if(this.password === undefined || logged_in) {
+            // set password
+            this.password = pw;
+            this.server.data.writeTable("SingleUserAuthenticationAPI", [{pw: pw}]);
+            this.server.sessionManager.setValueForAllSessions("SingleUserAuthenticationAPI:password_set", true);
+            this.sendAPIResponseSuccess(undefined, response);
+        } else {
+            this.sendAPIResponseError("SingleUserAuthenticationAPI", "You must be logged in to set the password.", response);
+        }
     }
     
-    public logout(sessionId: string|null, response: http.ServerResponse): void {
-        this.server.log("SingleUserAuthenticationAPI: logout");
-        if(sessionId) {
-            this.server.sessionManager.deleteSession(sessionId);
+    public login(url: URL, sessionId: string, response: http.ServerResponse): void {
+        this.server.log("SingleUserAuthenticationAPI: login");
+
+        if(!this.initialized) {
+            this.server.log("The SingleUserAuthenticationAPI is not initialized");
+            return;
         }
+
+        const pw = url.searchParams.get("pw");
+        const logged_in = this.server.sessionManager.getValue(sessionId, "SingleUserAuthenticationAPI:logged_in") || false;
+
+        if(this.password === undefined) {
+            this.sendAPIResponseError("SingleUserAuthenticationAPI", "No password set", response);
+        } else if(logged_in) {
+            this.sendAPIResponseError("SingleUserAuthenticationAPI", "Already logged in", response);
+        } else if(pw !== this.password) {
+            this.sendAPIResponseError("SingleUserAuthenticationAPI", "Invalid password", response);
+        } else {
+            this.server.sessionManager.setValue(sessionId, "SingleUserAuthenticationAPI:logged_in", true);
+            this.sendAPIResponseSuccess(undefined, response);
+        }
+    }
+    
+    public logout(sessionId: string, response: http.ServerResponse): void {
+        this.server.log("SingleUserAuthenticationAPI: logout");
+        this.server.sessionManager.deleteSession(sessionId);
         this.sendAPIResponseSuccess(undefined, response);
     }
 }

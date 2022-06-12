@@ -93,6 +93,7 @@ export class Server {
                 this.log(JSON.stringify({
                     protocol: this.protocol,
                     host: request.headers.host,
+                    method: request.method,
                     resource: request.url,
                     remoteAddress: request.socket.remoteAddress,
                     headers: this.config.logHeaders ? request.headers : undefined
@@ -125,7 +126,6 @@ export class Server {
                 const urlbase = this.protocol+"://"+request.headers.host;
                 let urlpath = request.url;
 
-                this.log(JSON.stringify(request.method));
                 if (request.method === 'POST') {
                     urlpath += urlpath.indexOf("?") < 0 ? "?" : "&";
                         
