@@ -173,6 +173,7 @@ export class Server {
     public async run(): Promise<void> {
         try {
             await this.data.createDataDir();
+            await Promise.all(this.modules.map(mod => mod.initModule()));
         } catch(error) {
             return Promise.reject(error);
         }

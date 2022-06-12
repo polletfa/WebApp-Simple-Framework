@@ -16,6 +16,8 @@ export abstract class ServerModule {
 
     constructor(server: Server) { this.server = server; }
 
+    public abstract initModule(): Promise<void>;
+    
     /**
      * Called when a new session is initialized.
      *

@@ -38,7 +38,7 @@ export class DataProvider {
                         this.server.log("Read table "+name+": empty");
                         resolve([]);
                     } else {
-                        this.server.log("Read table "+name+": FAILURE! (file-error)");
+                        this.server.log("Read table "+name+": " + err);
                         reject(err);
                     }
                 } else {
@@ -48,7 +48,7 @@ export class DataProvider {
                         if(!Array.isArray(json)) throw new Error("Not a table");
                         else resolve(json);
                     } catch(e) {
-                        this.server.log("Read database "+name+": FAILURE! (parse-error)");
+                        this.server.log("Read database "+name+": " + e);
                         reject(e);
                     }
                 }

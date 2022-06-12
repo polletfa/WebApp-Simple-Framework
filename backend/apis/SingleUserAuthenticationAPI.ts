@@ -11,21 +11,26 @@ import * as http from "http";
 
 import { Server } from "../Server";
 import { APIBase } from "../APIBase";
+import { DataTable } from "../DataProvider";
 
 export class SingleUserAuthenticationAPI extends APIBase {
+    private data: DataTable|undefined = undefined;
+    
     constructor(server: Server) {
-        server.log("Create SingleUserAuthenticationAPI");
         super(server);
-
-        // todo load data table
     }
 
+    public async initModule(): Promise<void> {
+        this.server.log("Create SingleUserAuthenticationAPI");
+        return this.server.data.readTable("SingleUserAuthenticationAPI").then(table => { this.data = table; });
+    }
+    
     /**
      * Called when a new session is initialized.
      *
      * @param sessionId Session ID
      */
-    public onSessionInit(sessionId: string): void {
+    public onSessionInit(sessionId: string): void {           
         sessionId;
         // todo check if password is set and set flag in session
     }

@@ -24,10 +24,13 @@ export class FrontendProvider extends ServerModule {
     protected static favicon: string;
 
     constructor(server: Server) {
-        server.log("Create FrontendProvider");
         super(server);
     }
 
+    public async initModule(): Promise<void> {
+        this.server.log("Create FrontendProvider");
+    }
+    
     static loadFrontendFiles(backend: BackendApplication): void {
         backend.log("Load frontend main file: "+Constants.FRONTEND_HTML);
         const frontend = fs.readFileSync(Constants.FRONTEND_HTML, "utf8");
