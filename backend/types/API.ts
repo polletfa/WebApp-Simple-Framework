@@ -39,7 +39,8 @@ export interface APIResponse {
     status: APIResponseStatus,
     errorType?: string,
     error?: string,
-    data?: unknown
+    // eslint-disable-next-line 
+    data?: any
 }
 
 // eslint-disable-next-line 

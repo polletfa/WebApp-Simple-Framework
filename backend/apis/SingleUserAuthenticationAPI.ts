@@ -11,7 +11,6 @@ import * as http from "http";
 
 import { Server } from "../Server";
 import { APIBase } from "../APIBase";
-import { DataTable } from "../DataProvider";
 
 export class SingleUserAuthenticationAPI extends APIBase {
     private initialized = false;
@@ -58,6 +57,10 @@ export class SingleUserAuthenticationAPI extends APIBase {
      */
     public handleRequest(url: URL, sessionId: string, response: http.ServerResponse): boolean {
         switch(url.pathname) {
+            case "/SingleUserAuthenticationAPI/status":
+                this.status(sessionId, response);
+                return true;
+                
             case "/SingleUserAuthenticationAPI/setpw":
                 this.setPassword(url, sessionId, response);
                 return true;
@@ -75,11 +78,23 @@ export class SingleUserAuthenticationAPI extends APIBase {
         }
     }
 
+    public status(sessionId: string, response: http.ServerResponse): void {
+        this.server.log("SingleUserAuthenticationAPI: status");
+
+        if(!this.initialized) {
+            this.sendAPIResponseError("SingleUserAuthenticationAPI", "The SingleUserAuthenticationAPI is not initialized", response);
+            return;
+        }
+        const logged_in = this.server.sessionManager.getValue(sessionId, "SingleUserAuthenticationAPI:logged_in") || false;
+
+        this.sendAPIResponseSuccess({password_set: this.password !== undefined, logged_in: logged_in}, response);
+    }
+    
     public setPassword(url: URL, sessionId: string, response: http.ServerResponse): void {
         this.server.log("SingleUserAuthenticationAPI: setpw");
 
         if(!this.initialized) {
-            this.server.log("The SingleUserAuthenticationAPI is not initialized");
+            this.sendAPIResponseError("SingleUserAuthenticationAPI", "The SingleUserAuthenticationAPI is not initialized", response);
             return;
         }
 
@@ -103,7 +118,7 @@ export class SingleUserAuthenticationAPI extends APIBase {
         this.server.log("SingleUserAuthenticationAPI: login");
 
         if(!this.initialized) {
-            this.server.log("The SingleUserAuthenticationAPI is not initialized");
+            this.sendAPIResponseError("SingleUserAuthenticationAPI", "The SingleUserAuthenticationAPI is not initialized", response);
             return;
         }
 
