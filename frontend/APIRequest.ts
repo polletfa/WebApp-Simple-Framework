@@ -21,10 +21,7 @@ export class APIRequest {
     
     protected onReceiveJSONHandler: ((resp:APIResponse)=>void)|undefined = undefined;
     protected onReceiveDataHandler: ((resp:Buffer)=>void)|undefined = undefined;
-    protected onFinishHandler: (()=>void)|undefined = undefined;
-
-    protected resolve: (()=>void)|undefined = undefined;
-    protected reject: (()=>void)|undefined = undefined;
+    protected onFinishHandler: ((success:boolean)=>void)|undefined = undefined;
 
     /**
      * Create and send an API request
@@ -37,10 +34,7 @@ export class APIRequest {
     constructor(ui: FrontendApplication, request: string, parameters: string|undefined, requestType: "GET"|"POST") {
         this.ui = ui;
         
-        new Promise<void>((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject = reject;
-            
+        new Promise<void>(() => {
             const httpRequest = new XMLHttpRequest();
             APIRequest.nRequests ++;
             let url = request;
@@ -95,11 +89,7 @@ export class APIRequest {
         APIRequest.nRequests = APIRequest.nRequests > 0 ? APIRequest.nRequests -1 : 0;
         this.ui.layout.show('loading-spinner', APIRequest.nRequests > 0);
         this.ui.layout.show('refresh-button', APIRequest.nRequests == 0 && this.ui.layout.isRefreshButtonVisible());
-        if(this.onFinishHandler) this.onFinishHandler();
-        if(success && this.resolve)
-            this.resolve();
-        else if(!success && this.reject)
-            this.reject();
+        if(this.onFinishHandler) this.onFinishHandler(success);
     }
 
     protected fail(errorMessage: string, extendedMessage: string): void {
