@@ -47,7 +47,7 @@ export class SessionManager {
         }
         // no cookie - Create new session and set cookie
         const sessionId = this.newSession();
-        response.setHeader('Set-Cookie', 'sessionId'+this.server.config.port+'='+sessionId+'; SameSite=Strict');
+        response.setHeader('Set-Cookie', 'sessionId'+this.server.config.port+'='+sessionId+'; Path=/; SameSite=Strict');
         return sessionId;
     }
     
