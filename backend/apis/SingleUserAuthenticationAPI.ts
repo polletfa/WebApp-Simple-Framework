@@ -12,6 +12,14 @@ import * as http from "http";
 import { Server } from "../Server";
 import { APIBase } from "../APIBase";
 
+export type SingleUserAuthenticationAPIStatus = { password_set: boolean, logged_in: boolean};
+
+// eslint-disable-next-line
+export function isSingleUserAuthenticationAPIStatus(arg: any): arg is SingleUserAuthenticationAPIStatus {
+    return ("password_set" in arg) && typeof arg.password_set == "boolean"
+        && ("logged_in" in arg) && typeof arg.logged_in == "boolean";
+}
+
 export class SingleUserAuthenticationAPI extends APIBase {
     private initialized = false;
     private password: string|undefined = undefined;
