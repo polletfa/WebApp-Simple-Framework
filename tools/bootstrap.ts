@@ -9,7 +9,6 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { execSync }  from "child_process";
 
 console.log("Bootstrap...");
 
@@ -18,7 +17,7 @@ const package_json = JSON.parse(fs.readFileSync("package.json", "utf8"));
 
 // copy files (and replace placeholders)
 function copyFolderSync(from: string, to: string) {
-    try { fs.mkdirSync(to); } catch {}
+    try { fs.mkdirSync(to); } catch { /* do nothing */ }
     fs.readdirSync(from).forEach(element => {
         if (fs.lstatSync(path.join(from, element)).isFile()) {
             console.log("  "+path.join(to, element));
