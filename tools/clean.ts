@@ -9,7 +9,7 @@
 
 import * as fs from "fs";
 
-const toDelete = ["_build", "_dist"];
+const toDelete = ["_build", "_dist", "_doc", "_doc_framework"];
 if(process.argv[2] == "--all") {
     toDelete.push("package-lock.json");
     toDelete.push("node_modules");

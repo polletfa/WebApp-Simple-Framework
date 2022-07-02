@@ -19,6 +19,7 @@ You can then use the following commands during development:
 - npm run deploy: Build and deploy the application into the _dist directory.
 - npm run deploy-dirty: Build and deploy without cleaning first (faster than deploy).
 - npm run start: Start the deployed application.
+- npm run doc: Generate code documentation
 - npm run clean: Remove generated files.
 - npm run dist-clean: Remove generated files and Node modules.
 
@@ -35,5 +36,5 @@ To deploy to a server:
 
 &copy; 2022 Fabien Pollet <polletfa@posteo.de>
 
-WebApp-Simple-Framework is licensed under the MIT license. See the [LICENSE file](./LICENSE.md) for details.
+WebApp-Simple-Framework is licensed under the MIT license. See the [LICENSE file](https://github.com/polletfa/WebApp-Simple-Framework/blob/develop/LICENSE.md) for details.
 
