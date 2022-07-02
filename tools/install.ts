@@ -16,17 +16,11 @@ const DIRTY = process.argv[2] == "--dirty";
 const TARGET = "_dist";
 
 const FILES = [
-    // Configuration
-    {src: "framework/config.yml",                     dest: "config.yml"},
-
-    // Backend
-    {src: "_build/src/backend.js",                    dest: "backend/index.js"},
-
-    // Frontend
-    {src: "_build/src/frontend.html",                 dest: "frontend/index.html"},
-
-    // Frontend - Favicon
-    {src: "src/frontend/favicon.svg",                 dest: "frontend/favicon.svg"}
+    {src: "example.service",          dest: "example.service"},     // Service file (example)
+    {src: "framework/config.yml",     dest: "config.yml"},          // Configuration
+    {src: "_build/src/backend.js",    dest: "backend/index.js"},    // Backend
+    {src: "_build/src/frontend.html", dest: "frontend/index.html"}, // Frontend
+    {src: "src/frontend/favicon.svg", dest: "frontend/favicon.svg"} // Frontend - Favicon
 ];
 
 console.log("Deploy...");
