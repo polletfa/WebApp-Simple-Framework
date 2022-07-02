@@ -7,7 +7,7 @@
 To create a new application based on this framework, proceed as follow:
 - Create an empty directory or git repository.
 - Copy the framework into the subdirectory framework/ (or include it as a git submodule).
-- Copy the file [example/package.json](https://github.com/polletfa/WebApp-Simple-Framework/example/package.json)
+- Copy the file example/package.json
 - Adapt the file to your needs: change name, author, license, homepage...
 - Install Node modules with: npm install
 - Run: npm run bootstrap
@@ -17,8 +17,10 @@ To create a new application based on this framework, proceed as follow:
 You can then use the following commands during development:
 - npm run build: Build the application.
 - npm run deploy: Build and deploy the application into the _dist directory.
-- npm run deploy-dirty: Build and deploy without cleaning first (faster than deploy)
-- npm run start: Start the deployed application
+- npm run deploy-dirty: Build and deploy without cleaning first (faster than deploy).
+- npm run start: Start the deployed application.
+- npm run clean: Remove generated files.
+- npm run dist-clean: Remove generated files and Node modules.
 
 ### Deploy
 
