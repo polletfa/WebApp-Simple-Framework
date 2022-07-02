@@ -20,9 +20,6 @@ export interface CustomWindow extends Window {
 declare let window: CustomWindow;
 
 // eslint-disable-next-line
-export type PageList = any;
-
-// eslint-disable-next-line
 export type ModuleList = any;
 
 /**
@@ -33,18 +30,15 @@ export class FrontendApplication {
     readonly layout: Layout;                                    /**< Manage layout */
 
     public refresh: () => void;                                 /**< Function called when displaying/refreshing the page */
-    public pages: PageList;                                     /**< List of pages */
     public modules: ModuleList;                                 /**< List of modules */
 
     /**
-     * @param pages Pages
      * @param modules Modules
      * @param refreshFunction Function called to refresh/reload the application
      */
-    constructor(pages: PageList, modules: ModuleList, refreshFunction: () => void) {
+    constructor(modules: ModuleList, refreshFunction: () => void) {
         window.application = this; // save the main class in the window object to be able to access it globally
 
-        this.pages = pages;
         this.modules = modules;
         this.refresh = refreshFunction;
  

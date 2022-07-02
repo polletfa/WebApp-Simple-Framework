@@ -7,7 +7,7 @@
  *
  *****************************************************/
 
-import { FrontendApplication, PageList } from './FrontendApplication';
+import { FrontendApplication, ModuleList } from './FrontendApplication';
 import { APIRequest } from './APIRequest';
 
 /**
@@ -149,15 +149,29 @@ export class Layout {
     }
 
     /**
+     * Check if a module is a page.
+     *
+     * A page is a module with a "showPage" method.
+     *
+     * @param name Module name
+     */
+    public isPage(name: keyof ModuleList) {
+        return "showPage" in this.ui.modules[name] && typeof this.ui.modules[name].showPage == "function";
+    }
+        
+    /**
      * Show a page (hide all others)
      *
-     * @param page list or register
+     * A page is a module with a "showPage" method.
+     *
+     * @param page Page name
      */
-    public showPage(page: ""|keyof PageList): void {
-        for(const item in this.ui.pages) {
-            this.show("content-"+item, item == page);
+    public showPage(page: ""|keyof ModuleList): void {
+        for(const item in this.ui.modules) {
+            if(this.isPage(item))
+                this.show("content-"+item, item == page);
         }
-        if(page != "") this.ui.pages[page].showPage();
+        if(page != "" && this.isPage(page)) this.ui.modules[page].showPage();
         this.resizeHeader();
     }
 
@@ -167,7 +181,7 @@ export class Layout {
      * @param str Input string
      * @return Escaped string
      */
-    protected escapeHTML(str: string): string {
+    public escapeHTML(str: string): string {
         return str.replace(
             /[&<>'"]/g,
             tag =>
@@ -179,5 +193,15 @@ export class Layout {
                     '"': '&quot;'
                 }[tag] || tag)
         );
+    }
+
+    /**
+     * Escape single quote. Use to include a variable into a single-quote string.
+     *
+     * @param str Input string
+     * @return Escaped string
+     */
+    public escapeSingleQuote(str: string): string {
+        return str.replace(/'/g, "\\'");
     }
 }
