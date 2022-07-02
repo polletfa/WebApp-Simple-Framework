@@ -34,7 +34,7 @@
     ],
     "scripts": {
         "doc": "typedoc --entryPointStrategy expand --out _doc src",
-        "doc-framework": "typedoc --entryPointStrategy expand --out _doc_framework framework/backend framework/frontend --readme framework/README.md",
+        "doc-framework": "typedoc --entryPointStrategy expand --out _doc_framework framework/backend framework/frontend --readme framework/doc/README.md",
         "bootstrap": "tsc framework/tools/bootstrap.ts --outDir _build/framework/tools && node ./_build/framework/tools/bootstrap.js",
         "lint": "eslint src framework --ext .ts",
         "lint-fix": "eslint --fix src framework --ext .ts",
