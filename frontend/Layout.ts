@@ -18,14 +18,16 @@ export class Layout {
  
     protected refreshButtonVisible = false;      /**< Specify if the refresh button is active for the current page */
     protected resizeInterval:ReturnType<typeof setTimeout>|undefined = undefined; /**< @see setResizeInterval */
-    protected title: string;
+    protected titlehead: string;
+    protected titlebody: string;
     
     /**
      * @param ui Main object of the FrontendApplication
      */
     constructor(ui: FrontendApplication) {
         this.ui = ui;
-        this.title = document.title;
+        this.titlehead = document.title;
+        this.titlebody = document.getElementById('title-text')?.innerHTML || "";
 
         // set events for collapsibles to resize the margin for the header during show/hide animation
         Array.prototype.forEach.call(document.getElementsByClassName('collapse'), (coll) => {
@@ -101,18 +103,18 @@ export class Layout {
     /**
      * Set title
      *
-     * @param path Path to display or false for standard title
+     * @param title Title to display or false for standard title
      */
-    public setTitle(path:string|false = false): void {
+    public setTitle(title:string|false = false): void {
         const titletext = document.getElementById('title-text');
         if(titletext == null) return;
         
-        if(!path) {
-            titletext.innerHTML = this.title;
-            document.title = this.title.replace(/&nbsp;/g, " ");
+        if(!title) {
+            titletext.innerHTML = this.titlebody;
+            document.title = this.titlehead.replace(/&nbsp;/g, " ");
         } else {
-            titletext.innerHTML = path;
-            document.title = path + ' - ' + this.title.replace(/&nbsp;/g, "");
+            titletext.innerHTML = title;
+            document.title = title + ' - ' + this.titlehead.replace(/&nbsp;/g, "");
         }
         this.resizeHeader();
     }
