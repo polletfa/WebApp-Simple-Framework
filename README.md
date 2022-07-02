@@ -2,9 +2,12 @@
 
 ## Usage
 
-- Create a copy of [WebApp-Simple-Framework-Example](https://github.com/polletfa/WebApp-Simple-Framework-Example).
-- Add WebApp-Simple-Framework as submodule under framework/.
-- Adapt [WebApp-Simple-Framework-Example](https://github.com/polletfa/WebApp-Simple-Framework-Example) to your needs.
+To create a new application based on this framework, proceed as follow:
+- Create an empty directory or git repository.
+- Copy the file [example/package.json](https://github.com/polletfa/WebApp-Simple-Framework/example/package.json)
+- Adapt the file to your needs: change name, author, license, homepage...
+- Install Node modules with: npm install
+- Run: npm run bootstrap
 
 ## License
 

@@ -16,10 +16,6 @@ const DIRTY = process.argv[2] == "--dirty";
 const TARGET = "_dist";
 
 const FILES = [
-    {src: "README.md",                                dest: "README.md"},
-    {src: "LICENSE.md",                               dest: "LICENSE.md"},
-    {src: "CHANGELOG.md",                             dest: "CHANGELOG.md"},
-
     // Configuration
     {src: "framework/config.yml",                     dest: "config.yml"},
 

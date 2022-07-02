@@ -1,0 +1,30 @@
+<!-- -------------------------------------------------
+
+   <!bootstrap:displayName>
+
+   <!bootstrap:copyright>
+   License: <!bootstrap:license> (see LICENSE.md file)
+  
+  --------------------------------------------------- -->
+ <div class="d-none" id="content-setpw">
+   <div class="row">
+     <div class="col">
+       <p>The server has not been configured yet.</p>
+     </div>
+   </div>
+   <div class="row">
+     <div class="col-2">
+       <div class="form-group">
+         <label for="password1">Password</label>
+         <input type="password" class="form-control" id="password1" placeholder="Password">
+       </div>
+       <div class="form-group">
+         <label for="password2">Password (repeat)</label>
+         <input type="password" class="form-control" id="password2" placeholder="Repeat password">
+       </div>
+       <button type="button" class="btn btn-dark" onclick="window.application.modules.setpw.setPassword();">Set password</button>
+       &nbsp;
+       <button id="setpw-cancel-btn" type="button" class="btn btn-dark d-none" onclick="window.application.modules.main.refresh();">Cancel</button>
+     </div>
+   </div>
+ </div>
