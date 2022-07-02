@@ -1,8 +1,42 @@
 {
     "name": "webapp-simple-framework-example",
     "displayName": "WebApp-Simple-Framework-Example",
-    "version": "0.1.0",
-    "description": "Sample application based on WebApp-Simple-Framework",
+    "version": "0.1.0-develop",
+    "description": "WebApp Simple Framework Example",
+    "scripts": {
+        "bootstrap": "tsc framework/tools/bootstrap.ts --outDir _build/framework/tools && node ./_build/framework/tools/bootstrap.js",
+        "lint": "eslint src framework --ext .ts",
+        "lint-fix": "eslint --fix src framework --ext .ts",
+        "compile": "tsc",
+        "webpack-backend": "webpack -c webpack.backend.js",
+        "webpack-frontend": "webpack -c webpack.frontend.js",
+        "webpack": "npm run webpack-backend && npm run webpack-frontend",
+        "build-frontend": "node ./_build/framework/tools/build_frontend.js",
+        "build": "npm run compile && npm run webpack && npm run build-frontend",
+        "deploy": "npm run build && node ./_build/framework/tools/install.js",
+        "deploy-dirty": "npm run build && node ./_build/framework/tools/install.js --dirty",
+        "start": "npm --prefix=_dist run start",
+        "clean": "tsc framework/tools/clean.ts --outDir _build/framework/tools && node ./_build/framework/tools/clean.js",
+        "dist-clean": "tsc framework/tools/clean.ts --outDir _build/framework/tools && node ./_build/framework/tools/clean.js --all"
+    },
+    "scripts-dist": {
+        "start": "node backend/index.js"
+    },
+    "__comment_install-files": "Specify additional files to include to the deployment package.",
+    "install-files": [
+        {
+            "src": "CHANGELOG.md",
+            "dest": "CHANGELOG.md"
+        },
+        {
+            "src": "LICENSE.md",
+            "dest": "LICENSE.md"
+        },
+        {
+            "src": "README.md",
+            "dest": "README.md"
+        }        
+    ],
     "keywords": [
         "WebApp",
         "Framework",
@@ -18,39 +52,6 @@
     "homepage": "https://github.com/polletfa/WebApp-Simple-Framework-Example#readme",
     "author": "Fabien Pollet <polletfa@posteo.de>",
     "license": "MIT",
-    "__comment_install-files": "Specify additional files to include to the deployment package.",
-    "install-files": [
-        {
-            "src": "README.md",
-            "dest": "README.md"
-        },
-        {
-            "src": "LICENSE.md",
-            "dest": "LICENSE.md"
-        },
-        {
-            "src": "CHANGELOG.md",
-            "dest": "CHANGELOG.md"
-        }
-    ],
-    "scripts": {
-        "lint": "eslint src framework --ext .ts",
-        "lint-fix": "eslint --fix src framework --ext .ts",
-        "compile": "tsc",
-        "webpack-backend": "webpack -c webpack.backend.js",
-        "webpack-frontend": "webpack -c webpack.frontend.js",
-        "webpack": "npm run webpack-backend && npm run webpack-frontend",
-        "build-frontend": "node ./_build/framework/tools/build_frontend.js",
-        "build": "npm run compile && npm run webpack && npm run build-frontend",
-        "deploy": "npm run build && node ./_build/framework/tools/install.js",
-        "deploy-dirty": "npm run build && node ./_build/framework/tools/install.js --dirty",
-        "run": "npm --prefix=_dist run launch",
-        "clean": "node ./_build/framework/tools/clean.js",
-        "dist-clean": "node ./_build/framework/tools/clean.js --all"
-    },
-    "scripts-dist": {
-        "launch": "node backend/index.js"
-    },
     "devDependencies": {
         "@types/bootstrap": "^5.1.8",
         "@types/js-yaml": "^4.0.5",

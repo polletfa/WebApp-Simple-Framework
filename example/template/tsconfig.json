@@ -18,7 +18,8 @@
         "outDir": "_build"
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "framework/example"
     ],
     "include": [
         "src/**/*.ts",
