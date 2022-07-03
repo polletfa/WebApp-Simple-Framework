@@ -29,7 +29,7 @@ export class KeyValue extends PageBase {
 
         window.application.modules.editKeyValue.onValidate((key:string,value:string) => {
             new APIRequest(window.application, "/SampleKeyValueAPI/set", "k="+encodeURIComponent(key)+"&v="+encodeURIComponent(value), "GET")
-                .onReceiveJSON(window.application.modules.keyvalue.showPage);
+                .onReceiveJSON(this.showPage.bind(this));
         });
 
         new APIRequest(window.application, "/SampleKeyValueAPI/list", "", "GET")
@@ -39,9 +39,9 @@ export class KeyValue extends PageBase {
                 const hasValidPayload = isSuccessful  && isSampleKeyValueAPIList(resp.data);
 
                 if(hasValidPayload) {
-                    window.application.modules.keyvalue.refreshTable(resp.data);
+                    this.refreshTable(resp.data);
                 } else {
-                    window.application.modules.KeyValue.refreshTable([]);
+                    this.refreshTable([]);
                     const detail = isValid && !isSuccessful
                         ? "The backend responded with an error: "+resp.error +" ("+resp.errorType+")"
                         : "The response has not the expected format: "+JSON.stringify(resp);
@@ -70,7 +70,7 @@ export class KeyValue extends PageBase {
 
     public unsetValue(key: string): void {
         new APIRequest(window.application, "/SampleKeyValueAPI/unset", "k="+encodeURIComponent(key), "GET")
-            .onReceiveJSON(this.showPage);
+            .onReceiveJSON(this.showPage.bind(this));
     }
 
     public newValue(): void {
