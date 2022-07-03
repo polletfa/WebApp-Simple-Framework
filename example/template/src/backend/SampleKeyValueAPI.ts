@@ -12,23 +12,11 @@ import * as http from "http";
 import { APIBase } from "../../framework/backend/APIBase";
 import { DataTable } from "../../framework/backend/DataProvider";
 import { Server } from "../../framework/backend/Server";
-    
-export type SampleKeyValueAPIListItem = {key: string, value: string};
-export type SampleKeyValueAPIList = SampleKeyValueAPIListItem[];
 
-// eslint-disable-next-line
-export function isSampleKeyValueAPIListItem(arg: any): arg is SampleKeyValueAPIListItem {
-    return ("key" in arg) && typeof arg.key == "string"
-        && ("value" in arg) && typeof arg.value == "string";
-}
-
-// eslint-disable-next-line
-export function isSampleKeyValueAPIList(arg: any): arg is SampleKeyValueAPIList {
-    return Array.isArray(arg) && arg.every(i => isSampleKeyValueAPIListItem(i));
-}
+import { SampleKeyValueAPIList, isSampleKeyValueAPIList } from "./types/SampleKeyValueAPI";
 
 export class SampleKeyValueAPI extends APIBase {
-    private data: DataTable|undefined = undefined;
+    private data: SampleKeyValueAPIList|undefined = undefined;
 
     constructor(server: Server) {
         super(server);
@@ -37,7 +25,11 @@ export class SampleKeyValueAPI extends APIBase {
     public async initModule(): Promise<void> {
         this.server.log("Create SampleKeyValueAPI");
 
-        return this.server.data.readTable("keyvalue").then(table => { this.data = table; });
+        return this.server.data.readTable("keyvalue").then(table => {
+            if(isSampleKeyValueAPIList(table)) {
+                this.data = table;
+            } else throw new Error("Wrong format for DataTable keyvalue");
+        });
     }
 
     /**

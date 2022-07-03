@@ -12,13 +12,7 @@ import * as http from "http";
 import { Server } from "../Server";
 import { APIBase } from "../APIBase";
 
-export type SingleUserAuthenticationAPIStatus = { password_set: boolean, logged_in: boolean};
-
-// eslint-disable-next-line
-export function isSingleUserAuthenticationAPIStatus(arg: any): arg is SingleUserAuthenticationAPIStatus {
-    return ("password_set" in arg) && typeof arg.password_set == "boolean"
-        && ("logged_in" in arg) && typeof arg.logged_in == "boolean";
-}
+import { isSingleUserAuthenticationAPIPassword } from "../types/SingleUserAuthenticationAPI";
 
 export class SingleUserAuthenticationAPI extends APIBase {
     private initialized = false;
@@ -32,9 +26,10 @@ export class SingleUserAuthenticationAPI extends APIBase {
         this.server.log("Create SingleUserAuthenticationAPI");
         return this.server.data.readTable("SingleUserAuthenticationAPI").then(data => {
             this.initialized = true;
-            if(data[0] && "pw" in data[0] && typeof data[0].pw == "string") {
-                this.password = data[0].pw;
-            }
+            if(isSingleUserAuthenticationAPIPassword(data)) {
+                if(data.length == 1)
+                    this.password = data[0].pw;
+            } else throw new Error("Wrong format for DataTable SingleUserAuthenticationAPI");
         });
     }
     

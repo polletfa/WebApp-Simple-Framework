@@ -10,7 +10,7 @@
 import { CustomWindow } from "../../../framework/frontend/FrontendApplication";
 import { APIRequest } from '../../../framework/frontend/APIRequest';
 
-import { isSingleUserAuthenticationAPIStatus } from '../../../framework/backend/apis/SingleUserAuthenticationAPI';
+import { isSingleUserAuthenticationAPIStatus } from '../../../framework/backend/types/SingleUserAuthenticationAPI';
 import { isAPIResponse } from '../../../framework/backend/types/API';
 
 declare let window: CustomWindow;

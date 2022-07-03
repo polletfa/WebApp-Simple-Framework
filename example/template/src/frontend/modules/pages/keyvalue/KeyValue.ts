@@ -12,7 +12,7 @@ import { PageBase } from "../../../../../framework/frontend/PageBase";
 import { APIRequest } from "../../../../../framework/frontend/APIRequest";
 
 import { isAPIResponse } from "../../../../../framework/backend/types/API";
-import { isSampleKeyValueAPIList, SampleKeyValueAPIList } from "../../../../backend/SampleKeyValueAPI";
+import { isSampleKeyValueAPIList, SampleKeyValueAPIList } from "../../../../backend/types/SampleKeyValueAPI";
 
 declare let window: CustomWindow;
 
