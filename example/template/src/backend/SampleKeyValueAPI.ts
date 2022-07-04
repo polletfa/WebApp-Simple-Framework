@@ -10,7 +10,6 @@
 import * as http from "http";
 
 import { APIBase } from "../../framework/backend/APIBase";
-import { DataTable } from "../../framework/backend/DataProvider";
 import { Server } from "../../framework/backend/Server";
 
 import { SampleKeyValueAPIList, isSampleKeyValueAPIList } from "./types/SampleKeyValueAPI";
