@@ -42,7 +42,7 @@ export class FrontendApplication {
         this.modules = modules;
         this.refresh = refreshFunction;
  
-        // read backend config
+        // read config provided by backend
         const bc = document.getElementById("FrontendConfig");
         if(bc instanceof HTMLElement) {
             const loadedConf = JSON.parse(bc.innerHTML);
