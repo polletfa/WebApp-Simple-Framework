@@ -46,7 +46,7 @@
         "deploy-dirty": "npm run build && node ./_build/framework/tools/install.js --dirty",
         "start": "npm --prefix=_dist run start",
         "clean": "tsc framework/tools/clean.ts --outDir _build/framework/tools && node ./_build/framework/tools/clean.js",
-        "dist-clean": "tsc framework/tools/clean.ts --outDir _build/framework/tools && node ./_build/framework/tools/clean.js --all"
+        "dist-clean": "tsc framework/tools/clean.ts --outDir _build/framework/tools && node ./_build/framework/tools/clean.js --all",
         "framework:doc": "typedoc --entryPointStrategy expand --out _doc_framework framework/backend framework/frontend --readme framework/doc/README.md",
         "framework:update": "cd framework && git pull",
         "framework:bootstrap": "tsc framework/tools/bootstrap.ts --outDir _build/framework/tools && node ./_build/framework/tools/bootstrap.js"
