@@ -34,8 +34,6 @@
     ],
     "scripts": {
         "doc": "typedoc --entryPointStrategy expand --out _doc src",
-        "doc-framework": "typedoc --entryPointStrategy expand --out _doc_framework framework/backend framework/frontend --readme framework/doc/README.md",
-        "bootstrap": "tsc framework/tools/bootstrap.ts --outDir _build/framework/tools && node ./_build/framework/tools/bootstrap.js",
         "lint": "eslint src framework --ext .ts",
         "lint-fix": "eslint --fix src framework --ext .ts",
         "compile": "tsc",
@@ -49,6 +47,9 @@
         "start": "npm --prefix=_dist run start",
         "clean": "tsc framework/tools/clean.ts --outDir _build/framework/tools && node ./_build/framework/tools/clean.js",
         "dist-clean": "tsc framework/tools/clean.ts --outDir _build/framework/tools && node ./_build/framework/tools/clean.js --all"
+        "framework:doc": "typedoc --entryPointStrategy expand --out _doc_framework framework/backend framework/frontend --readme framework/doc/README.md",
+        "framework:update": "cd framework && git pull",
+        "framework:bootstrap": "tsc framework/tools/bootstrap.ts --outDir _build/framework/tools && node ./_build/framework/tools/bootstrap.js"
     },
     "scripts-dist": {
         "start": "node backend/index.js"

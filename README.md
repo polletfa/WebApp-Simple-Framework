@@ -10,7 +10,7 @@ To create a new application based on this framework, proceed as follow:
 - Copy the file example/package.json
 - Adapt the file to your needs: change name, author, license, homepage...
 - Install Node modules with: npm install
-- Run: npm run bootstrap
+- Run: npm run framework:bootstrap
 
 ### Develop
 
