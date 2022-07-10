@@ -121,7 +121,7 @@ class FrontendBuilder {
                     this.result = this.result.replace(/<\/head>/, "<style>"+FrontendBuilder.removeSourceMappingURL(fs.readFileSync(this.IMPORT_FROM+"/"+imported, "utf8"))+"</style>\n</head>");
                 } else if(imported.substr(-4).toLowerCase() === ".svg") {
                     console.log("  Import SVG Sprite '"+imported+"'");
-                    this.result = this.result.replace(/<\/body>/, FrontendBuilder.removeSourceMappingURL(fs.readFileSync(this.IMPORT_FROM+"/"+imported, "utf8"))+"\n</body>");
+                    this.result = this.result.replace(/<\/body>/, FrontendBuilder.removeSourceMappingURL(fs.readFileSync(this.IMPORT_FROM+"/"+imported, "utf8")).replace(/<svg\s/, '<svg class="d-none" ')+"\n</body>");
                 } else {
                     console.log("  WARNING: Unknown import '"+imported+"' (wrong type)");
                 }
