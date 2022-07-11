@@ -57,6 +57,16 @@ export class SVG {
     }
     
     /**
+     * Add a child at the beginning of the list
+     *
+     * @param child New child. Can either be another SVG element or simply a text
+     */
+    public addChildFirst(child: SVG|string): SVG {
+        this.children.unshift(child);
+        return this;
+    }
+    
+    /**
      * Build the SVG
      *
      * @return SVG as a string
@@ -71,7 +81,7 @@ export class SVG {
 }
 
 /**
- * Center a text into an invisible rectangle
+ * Center a text inside a rectangular area
  */
 export class CenteredText extends SVG {
     constructor(rect: Rect, font: Font, text: string) {
@@ -86,6 +96,29 @@ export class CenteredText extends SVG {
                     .addAttribute("y", "50%")
                     .addAttribute("dominant-baseline", "central")
                     .addAttribute("text-anchor", "middle")
+                    .addAttribute("fill", font.color)
+                    .addAttribute("style", "font-size: "+font.size+"; font-family: "+font.family+"; font-weight: "+font.weight)
+                    .addChild(text)
+            )
+    }
+}
+
+/**
+ * Left-aligned text (vertically centered inside a rectangular area)
+ */
+export class LeftText extends SVG {
+    constructor(rect: Rect, font: Font, text: string) {
+        super();
+        this.addAttribute("x", rect.x.toString())
+            .addAttribute("y", rect.y.toString())
+            .addAttribute("width", rect.width.toString())
+            .addAttribute("height", rect.height.toString())
+            .addChild(
+                new SVG("text")
+                    .addAttribute("x", "0")
+                    .addAttribute("y", "50%")
+                    .addAttribute("dominant-baseline", "central")
+                    .addAttribute("text-anchor", "start")
                     .addAttribute("fill", font.color)
                     .addAttribute("style", "font-size: "+font.size+"; font-family: "+font.family+"; font-weight: "+font.weight)
                     .addChild(text)
