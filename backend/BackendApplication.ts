@@ -14,7 +14,8 @@ import { FrontendProvider } from "./FrontendProvider";
 import { Server } from "./Server";
 import { ServerModuleFactoryFunction } from "./ServerModule";
 
-import { SingleUserAuthenticationAPI } from "./apis/SingleUserAuthenticationAPI";
+import { Redirect } from "./modules/Redirect";
+import { SingleUserAuthenticationAPI } from "./modules/SingleUserAuthenticationAPI";
 
 import { ServerConfig } from "./types/Config";
 
@@ -35,7 +36,7 @@ export class BackendApplication {
     /**
      * Start backend application
      */
-    constructor(apis: (ServerModuleFactoryFunction|string)[]) {
+    constructor(modules: (ServerModuleFactoryFunction|string)[]) {
         try {
             // switch to the package root directory
             process.chdir(__dirname + "/..");
@@ -53,35 +54,61 @@ export class BackendApplication {
             const config = ConfigHelper.load(this);
             const plural = config.length > 1 ? "s" : "";
 
-            // Prepare APIs
-            const preparedAPIs = [];
-            for(const api of apis) {
-                if(api === "SingleUserAuthenticationAPI") {
-                    // Built-in API
-                    this.log("Using built-in API: SingleUserAuthenticationAPI");
-                    preparedAPIs.push((server:Server) => new SingleUserAuthenticationAPI(server));
-                } else if(typeof api === "string") {
-                    // Unknown API
-                    this.log("Unknown built-in API: " + api);
+            // Prepare modules
+            const preparedModules = [];
+            for(const mod of modules) {
+                if(typeof mod === "string") {
+                    // Built-in modules
+                    const modParsed = mod.split(":");
+                    let isBuiltin = false;
+                    let isValid = false;
+                    
+                    switch(modParsed[0]) {
+                        case "SingleUserAuthenticationAPI":
+                            isBuiltin = true;
+                            isValid = modParsed.length === 1;
+                            preparedModules.push((server:Server) => new SingleUserAuthenticationAPI(server));
+                            break;
+
+                        case "Redirect":
+                            isBuiltin = true;
+                            isValid = modParsed.length === 2;
+                            preparedModules.push((server:Server) => new Redirect(server, modParsed[1].split(",")));
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    if(isBuiltin) {
+                        if(isValid) {
+                            this.log("Using built-in module: "+modParsed[0]);
+                        } else {
+                            this.log("Invalid syntax for built-in module: "+modParsed[0]);
+                        }
+                    } else {
+                        this.log("Unknown built-in module: " + modParsed[0]);
+                    }
                 } else {
-                    // User-defined APIs
-                    preparedAPIs.push(api);
+                    // Custom module
+                    this.log("Using custom module");
+                    preparedModules.push(mod);
                 }
             }
 
             // Start servers
             this.log("Starting server"+plural+" on port"+plural+": "+config.map(server => server.port).join(", "));
             this.log("---");
-            this.startServers(config, preparedAPIs);
+            this.startServers(config, preparedModules);
         } catch(e) {
             this.die(e instanceof Error ? e : new Error(String(e)));
         }
     }
 
-    protected async startServers(config: ServerConfig[], apis: ServerModuleFactoryFunction[]): Promise<void> {
+    protected async startServers(config: ServerConfig[], modules: ServerModuleFactoryFunction[]): Promise<void> {
         for(const server of config) {
             // Initialize and launch HTTP/HTTPS server
-            await (new Server(this, apis, server)).run()
+            await (new Server(this, modules, server)).run()
                 .catch((e:Error) => this.die(e));
             this.log("---");
         }
